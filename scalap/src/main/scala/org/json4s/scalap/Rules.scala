@@ -58,7 +58,7 @@ trait Rules {
   }
 
   def ruleWithName[In, Out, A, X](_name: String, f: In => Result[Out, A, X]): Rule[In, Out, A, X] with Name =
-    new DefaultRule(f) with Name {
+    new DefaultRule[In, Out, A, X](f) with Name {
       val name = _name
     }
 
