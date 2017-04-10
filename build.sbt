@@ -3,6 +3,17 @@ import com.typesafe.sbt.SbtStartScript
 import Dependencies._
 import build._
 
+def dottyEnable(project: Project): Project = dottyEnableWithVersion(project, dottyLatestNightlyBuild.get)
+def dottyEnableWithVersion(project: Project, dottyVersion: String): Project =
+ project
+   .settings(
+     scalaVersion := dottyVersion,
+     // `scalacOption +=` keeps existing options such as -Xwarn-unused-import
+     // which are invalid with Dotty.
+     scalacOptions := Seq("-language:Scala2")
+   )
+   .enablePlugins(DottyPlugin)
+
 lazy val root = Project(
   id = "json4s",
   base = file("."),
@@ -16,13 +27,13 @@ lazy val ast = Project(
     buildInfoKeys := Seq[BuildInfoKey](name, organization, version, scalaVersion, sbtVersion),
     buildInfoPackage := "org.json4s"
   )
-).enablePlugins(BuildInfoPlugin)
+).enablePlugins(BuildInfoPlugin).configure(dottyEnable)
 
 lazy val scalap = Project(
   id = "json4s-scalap",
   base = file("scalap"),
   settings = json4sSettings
-)
+).configure(dottyEnable)
 
 lazy val core = Project(
   id = "json4s-core",
@@ -34,13 +45,13 @@ lazy val core = Project(
         |import reflect._
       """.stripMargin
   )
-) dependsOn(ast % "compile;test->test", scalap)
+).dependsOn(ast % "compile;test->test", scalap).configure(dottyEnable)
 
 lazy val native = Project(
   id = "json4s-native",
   base = file("native"),
   settings = json4sSettings
-) dependsOn(core % "compile;test->test")
+).dependsOn(core % "compile;test->test").configure(dottyEnable)
 
 lazy val json4sExt = Project(
   id = "json4s-ext",
