@@ -81,7 +81,7 @@ trait Rule[-In, +Out, +A, +X] extends (In => Result[Out, A, X]) {
 
   def -~[Out2, B, X2 >: X](next: => Rule[Out, Out2, B, X2]) = for (a <- this; b <- next) yield b
 
-  def ~++[Out2, B >: A, X2 >: X](next: => Rule[Out, Out2, Seq[B], X2]) = for (a <- this; b <- next) yield a :: b.toList
+  def ~++[Out2, B >: A, X2 >: X](next: => Rule[Out, Out2, Seq[B], X2]): Rule[In, Out2, List[B], X2] = for (a <- this; b <- next) yield a :: b.toList
 
   /** Apply the result of this rule to the function returned by the next rule */
   def ~>[Out2, B, X2 >: X](next: => Rule[Out, Out2, A => B, X2]) = for (a <- this; fa2b <- next) yield fa2b(a)
