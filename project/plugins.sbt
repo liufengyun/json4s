@@ -6,8 +6,7 @@ addSbtPlugin("org.xerial.sbt"   % "sbt-sonatype"         % "1.0")
 addSbtPlugin("com.jsuereth"     % "sbt-pgp"              % "1.0.0")
 addSbtPlugin("com.timushev.sbt" % "sbt-updates"          % "0.1.10")
 
-addSbtPlugin("ch.epfl.lamp" % "sbt-dotty" % "0.1.0-RC2")
-
+addSbtPlugin("ch.epfl.lamp" % "sbt-dotty" % "0.1.5")
 
 scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature")
 

@@ -51,7 +51,7 @@ lazy val native = Project(
   id = "json4s-native",
   base = file("native"),
   settings = json4sSettings
-).dependsOn(core % "compile;test->test").configure(dottyEnable)
+).dependsOn(core % "compile;test->test") // .configure(dottyEnable)
 
 lazy val json4sExt = Project(
   id = "json4s-ext",
